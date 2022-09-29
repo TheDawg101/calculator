@@ -51,7 +51,7 @@ body {
 
 .display {  
     min-height: 30px;
-    padding: 8px;
+    padding:  8px 20px;
 }
 
 #output1 {

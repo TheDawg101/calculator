@@ -7,71 +7,83 @@ let newOperator;
 let newNumber;
 let newDigit;
 let newDigitArray = [];
+let total = 0;
 
 buttons.forEach(btn => {
     btn.addEventListener('click', e => {
-        if (e.target.textContent == "=") {
-            displayBottom.textContent = "result";
-            formulaArray = [];
-            entries = 0;
-            newDigit = "";
-            newNumber = "";
-            newDigitArray = [];
-        } else if (e.target.textContent == "DELETE") {
-            formulaArray.splice(-1);
-            displayTop.textContent = formulaArray.join(' ');
-            entries -= 1;
-        } else if (e.target.textContent == "CLEAR") {
-            displayTop.textContent = "";
-            displayBottom.textContent = "0";
-            formulaArray = [];
-            newDigit = "";
-            newNumber = "";
-            newDigitArray = [];
-            newOperator = "";
-            entries = 0;
-        } else if (e.target.textContent == ".") {
-                newDigit = e.target.textContent;
-                newDigitArray.push(newDigit);
-                newNumber = newDigitArray.join(''); 
-                displayTop.textContent = formulaArray.join(' ') + " " + newNumber;
-        } else if (isNaN(Number(e.target.textContent))) {
-                newOperator = e.target.textContent;
+        if ((e.target.textContent == "DELETE") || (entries < 20)) { //this limits entries
+            if (e.target.textContent == "=") {
                 formulaArray.push(newNumber);
-                formulaArray.push(newOperator);
+                newNumber = "";
+                result();
+                displayBottom.textContent = total;              
+            } else if (e.target.textContent == "DELETE") {
+                if (newNumber == "") {
+                    formulaArray.splice(-1);
+                } else {
+                    formulaArray.push(newNumber);
+                    formulaArray.splice(-1); 
+                }
                 displayTop.textContent = formulaArray.join(' ');
-                entries += 1;
+                newDigit = "";
+                newOperator = "";
+                newNumber = "";
+                newDigitArray = [];
+            } else if (e.target.textContent == "CLEAR") {
+                displayTop.textContent = "";
+                displayBottom.textContent = "0";
+                formulaArray = [];
                 newDigit = "";
                 newNumber = "";
                 newDigitArray = [];
+                newOperator = "";
+                total = 0;
+            } else if (e.target.textContent == ".") {
+                if (newDigitArray.includes(".")) { //prevents multiple decimals
+                    // nothing happens
+                } else {
+                    newDigit = e.target.textContent;
+                    newDigitArray.push(newDigit);
+                    newNumber = newDigitArray.join(''); 
+                    displayTop.textContent = formulaArray.join(' ') + " " + newNumber;
+                }
+            } else if (isNaN(Number(e.target.textContent))) {
+                    newOperator = e.target.textContent;
+                    formulaArray.push(newNumber);
+                    formulaArray.push(newOperator);
+                    displayTop.textContent = formulaArray.join(' ');
+                    newNumber = "";
+                    newDigitArray = [];
+            } else {
+                    newDigit = e.target.textContent;
+                    newDigitArray.push(newDigit);
+                    newNumber = newDigitArray.join(''); 
+                    displayTop.textContent = formulaArray.join(' ') + " " + newNumber;        
+            }
         } else {
-                newDigit = e.target.textContent;
-                newDigitArray.push(newDigit);
-                newNumber = newDigitArray.join(''); 
-                displayTop.textContent = formulaArray.join(' ') + " " + newNumber;        
+            //nothing happens if over 10 entries
         }
-
     })
 })
 
-
-
 function result() {
-
+    total = Number(formulaArray[0]);
+    for (i = 1; i < formulaArray.length; i++) {
+        if ((formulaArray[i] == "÷") && (formulaArray[i+1] == 0)) {
+            total = "Only idiots try to divide by zero!";
+        } else {
+            if (formulaArray[i] == "÷") {
+                total /= Number(formulaArray[i+1]);
+            } else if (formulaArray[i] == "x") {
+                total *= Number(formulaArray[i+1]);
+            } else if (formulaArray[i] == "-") {
+                total -= Number(formulaArray[i+1]);
+            } else if (formulaArray[i] == "+") {
+                total += Number(formulaArray[i+1]);
+            } else {
+                //skip numbers
+            }
+        }    
+    }
+    return total;
 }
-
-
-let xi = "3";
-let yi = "+";
-let zi = "4";
-
-let xii = Number(xi);
-let zii = Number(zi);
-let whatis;
-
-function answer() {
-    whatis = (xii + yi + zii);
-    console.log(whatis);
-}
-answer();
-

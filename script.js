@@ -11,7 +11,7 @@ let total = 0;
 
 buttons.forEach(btn => {
     btn.addEventListener('click', e => {
-        if ((e.target.textContent == "DELETE") || (entries < 20)) { //this limits entries
+        if ((e.target.textContent == "DELETE") || (formulaArray.length < 20)) { //this limits entries
             if (e.target.textContent == "=") {
                 formulaArray.push(newNumber);
                 newNumber = "";

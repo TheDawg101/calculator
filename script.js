@@ -15,6 +15,7 @@ buttons.forEach(btn => {
             if (e.target.textContent == "=") {
                 formulaArray.push(newNumber);
                 newNumber = "";
+                newDigitArray = [];
                 result();
                 displayBottom.textContent = total;              
             } else if (e.target.textContent == "DELETE") {
